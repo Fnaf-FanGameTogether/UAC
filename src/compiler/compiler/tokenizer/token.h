@@ -6,7 +6,7 @@
 
 #include "utils/length.h"
 
-#define NULL (void*)0
+
 
 // enum TokenType {
     // EOF = 0,
@@ -14,7 +14,8 @@
     // IDENTIFIER = 2,
     // SYMBOL = 3,
     // INTEGER_LITERAL = 4,
-    // STRING_LITERAL = 5
+    // STRING_LITERAL = 5,
+    // TOKEN_NOT_READY = 0xff
 // };
 
 struct pos_s {
@@ -48,9 +49,26 @@ pos_t* copy_pos(pos_t* og);
 
 token_t* create_token(char* val, uint16_t size, toktype_t type, pos_t* pos);
 void destroy_token(token_t* tok);
+void create_unready_token(token_t* tok);
+
+void _write_token_info(token_t* tok, char* val, uint16_t size, toktype_t type, pos_t* pos);
 
 
 // function code
+
+
+void _write_token_info(token_t* tok, char* val, uint16_t size, toktype_t type, pos_t* pos)
+{
+    tok->val = val;
+    tok->size =  size;
+    tok->type = type;
+    tok->pos = copy_pos(pos);
+    if(tok->pos == NULL)
+    {
+        // bad luck, but whatever
+    }
+    
+}
 
 pos_t* copy_pos(pos_t* og)
 {
@@ -66,6 +84,21 @@ pos_t* copy_pos(pos_t* og)
 
     return new;
 }
+
+void create_unready_token(token_t* tok)
+{
+
+    // token_t* tok = (token_t*)malloc(sizeof(token_t));
+    
+    if(tok == NULL) {
+        return NULL;
+    }
+
+    tok->type = 0xff;
+
+    return tok;
+}
+
 
 token_t* create_token(char* val, uint16_t size, toktype_t type, pos_t* pos)
 {
@@ -90,7 +123,13 @@ token_t* create_token(char* val, uint16_t size, toktype_t type, pos_t* pos)
 }
 
 void destroy_token(token_t* tok)
-{
+{  
+    if(tok->type==0xff)
+    {
+        free(tok);
+        return;
+    }
+
     destroy_pos(tok->pos);
 
     if(tok->val!=NULL){
