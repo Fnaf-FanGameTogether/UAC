@@ -25,8 +25,7 @@ typedef struct tokens_chunk_s tokens_chunk_t;
 
 struct tokenarr_s {
     tokens_chunk_t* head;
-    tokens_chunk_t* end;
-    tokens_chunk_t* curr;
+    tokens_chunk_t* end; // append to last one
     length_t cc_i;
 };
 
