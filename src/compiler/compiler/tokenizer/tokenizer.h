@@ -26,6 +26,7 @@ typedef struct tokens_chunk_s tokens_chunk_t;
 struct tokenarr_s {
     tokens_chunk_t* head;
     tokens_chunk_t* end; // append to last one
+
     length_t cc_i;
 };
 
@@ -37,6 +38,14 @@ tokens_chunk_t* create_tokens_chunk();
 void destroy_tokens_chunk(tokens_chunk_t* cht);
 void _write_token(tokens_chunk_t* cht, toktype_t type, char* val,uint16_t size, pos_t* pos, uint8_t* state);
 void _delete_token(tokens_chunk_t* cht);
+void _create_tokarr(tokenarr_t** arr);
+void _destroy_tokarr(tokenarr_t* arr);
+
+
+// this is important
+uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos_t* pos);
+
+
 
 // functions code
 tokens_chunk_t* create_tokens_chunk()
@@ -51,7 +60,7 @@ tokens_chunk_t* create_tokens_chunk()
     }
     for(uint8_t i=0; i < TOKENS_CHUNK_SIZE;i++)
     {
-        create_unready_token(chunks->toks + i);
+        create_unready_token(chunk->toks + i);
     }
     
     chunk->cwt = 0; // Current Working Token
@@ -66,15 +75,18 @@ void destroy_tokens_chunk(tokens_chunk_t* cht)
     for(uint8_t i=0; i < TOKENS_CHUNK_SIZE; i++)
     {
         // token_t *tok = chunks->toks + i 
-        destroy_token(chunks->toks + i);
+        destroy_token(cht->toks + i);
     }
 
-    free(chunk); // do not free next chunk, leave that for the upper destroying function.
+    free(cht); // do not free next chunk, leave that for the upper destroying function.
 }
 
 void _write_token(tokens_chunk_t* cht, toktype_t type, char* val,uint16_t size, pos_t* pos, uint8_t* state)
 {
     // check for space left, if none, raise a flag and exit
+    // succeed by defult
+    *state = 0;
+
     if(cht->cwt >= TOKENS_CHUNK_SIZE - 1)
     {
         // need to append new chunk
@@ -89,6 +101,7 @@ void _write_token(tokens_chunk_t* cht, toktype_t type, char* val,uint16_t size, 
 
 void _delete_token(tokens_chunk_t* cht)
 {
+    // hopefully not used
     if (cht->cwt == 0)
     {
         return;
@@ -102,5 +115,86 @@ void _delete_token(tokens_chunk_t* cht)
 
     return;
 }
+
+
+void _create_tokarr(tokenarr_t** arr)
+{
+    tokenarr_t* karr = (tokenarr_t*)malloc(sizeof(tokenarr_t));
+    if(karr == NULL)
+    {
+        return;
+    }
+    *arr = karr;
+
+    karr->cc_i = 1; // head
+
+    karr->head = karr->end = create_tokens_chunk();
+
+    return;
+}
+
+void _destroy_tokarr(tokenarr_t* arr)
+{
+    tokens_chunk_t* curr= arr->head;
+    uint8_t sb=0;
+    while(!sb)
+    {
+        // can't say curr->next because destroy_tokens_chunk deallocates that pointer as well
+        
+        if(curr->next == NULL){
+            sb = 1;
+        }
+        
+        destroy_tokens_chunk(curr);
+
+        if (!sb){
+            curr = curr->next;
+        }
+    }
+
+    free(arr);
+
+    return;
+}
+
+uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos_t* pos)
+{
+    // Wow.
+    /*
+     if(!push_token(...))
+     {
+        // failed
+     } else {
+        // succeded
+     }
+    */
+    uint8_t state;
+    if(arr == NULL)
+    {
+        // whatever
+        return 0;
+    }
+    tokens_chunk_t* end = arr->end;
+    _write_token(end, type, val, size, pos, &state);
+    if(state)
+    {
+        // failed, append a new chunk
+        tokens_chunk_t* appended = create_tokens_chunk();
+        if(appended == NULL)
+        {
+            return 0;
+        }
+        end->next = appended;
+        arr->cc_i++;
+        _write_token(appended, type, val, size, pos, &state);
+        if(state){
+            // we give up
+            return 0;
+        }
+    }
+    return 1;
+}
+
+
 
 #endif

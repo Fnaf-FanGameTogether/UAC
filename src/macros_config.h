@@ -9,4 +9,9 @@
 // #define TOKENS_CHUNK_SIZE 16 
 
 
+// this is just for Visual Studio to stop complaining.
+#ifndef NULL
+#define NULL (void*)0
+#endif
+
 #endif

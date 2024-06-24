@@ -67,7 +67,7 @@ void _write_token_info(token_t* tok, char* val, uint16_t size, toktype_t type, p
     {
         // bad luck, but whatever
     }
-    
+
 }
 
 pos_t* copy_pos(pos_t* og)
@@ -91,12 +91,12 @@ void create_unready_token(token_t* tok)
     // token_t* tok = (token_t*)malloc(sizeof(token_t));
     
     if(tok == NULL) {
-        return NULL;
+        return;
     }
 
     tok->type = 0xff;
 
-    return tok;
+    return;
 }
 
 
