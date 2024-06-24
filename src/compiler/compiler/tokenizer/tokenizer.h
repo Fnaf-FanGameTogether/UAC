@@ -51,7 +51,7 @@ tokens_chunk_t* create_tokens_chunk()
     }
     for(uint8_t i=0; i < TOKENS_CHUNK_SIZE;i++)
     {
-        create_unready_token(chunks->toks + i);
+        create_unready_token(chunk->toks + i);
     }
     
     chunk->cwt = 0; // Current Working Token
@@ -61,7 +61,7 @@ tokens_chunk_t* create_tokens_chunk()
     return chunk;
 }
 
-void destroy_tokens_chunk(tokens_chunk_t* cht)
+void destroy_tokens_chunk(tokens_chunk_t* chunks)
 {
     for(uint8_t i=0; i < TOKENS_CHUNK_SIZE; i++)
     {
@@ -69,7 +69,7 @@ void destroy_tokens_chunk(tokens_chunk_t* cht)
         destroy_token(chunks->toks + i);
     }
 
-    free(chunk); // do not free next chunk, leave that for the upper destroying function.
+    free(chunks); // do not free next chunk, leave that for the upper destroying function.
 }
 
 void _write_token(tokens_chunk_t* cht, toktype_t type, char* val,uint16_t size, pos_t* pos, uint8_t* state)
