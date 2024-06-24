@@ -8,15 +8,15 @@
 
 
 
-// enum TokenType {
-    // EOF = 0,
-    // EOS = 1, // End Of Statement
-    // IDENTIFIER = 2,
-    // SYMBOL = 3,
-    // INTEGER_LITERAL = 4,
-    // STRING_LITERAL = 5,
-    // TOKEN_NOT_READY = 0xff
-// };
+enum TokenType {
+    EOFile = 0,
+    EOS = 1, // End Of Statement
+    IDENTIFIER = 2,
+    SYMBOL = 3,
+    INTEGER_LITERAL = 4,
+    STRING_LITERAL = 5,
+    TOKEN_NOT_READY = 0xff
+};
 
 struct pos_s {
     length_t cursor;  // file's cursor
@@ -27,8 +27,9 @@ struct pos_s {
 typedef struct pos_s pos_t;
 
 
-typedef uint8_t toktype_t;
-// #define toktype_t uint8_t
+typedef enum TokenType toktype_t;
+//typedef uint8_t toktype_t;
+// #define toktype_t uint8_t // shut up
 
 struct token_s {
     pos_t* pos;
@@ -94,7 +95,8 @@ void create_unready_token(token_t* tok)
         return;
     }
 
-    tok->type = 0xff;
+    //tok->type = 0xff;
+    tok->type = TOKEN_NOT_READY;
 
     return;
 }
