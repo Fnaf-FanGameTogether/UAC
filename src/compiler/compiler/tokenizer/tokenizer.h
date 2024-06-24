@@ -160,7 +160,8 @@ void _destroy_tokarr(tokenarr_t* arr)
 uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos_t* pos)
 {
     // Wow.
-    /*
+    // WHY??? 
+    /* 
      if(!push_token(...))
      {
         // failed

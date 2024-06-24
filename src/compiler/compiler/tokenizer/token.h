@@ -126,7 +126,7 @@ token_t* create_token(char* val, uint16_t size, toktype_t type, pos_t* pos)
 
 void destroy_token(token_t* tok)
 {  
-    if(tok->type==0xff)
+    if(tok->type==TOKEN_NOT_READY)
     {
         free(tok);
         return;

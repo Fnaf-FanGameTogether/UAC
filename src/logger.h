@@ -1,6 +1,6 @@
-
+// #pragma once
 #ifndef LOGGER_H
-#define LOGGER_H //LOGGER_G OOPS
+#define LOGGER_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,16 +8,13 @@
 #include <stdarg.h>
 
 
-
 /// NEEDS CLEANUP AND FIXING/TESTING
-
-// #define str char* // It's just a prank bro
 
 enum TypeOfLog {
     NORMAL = 0, // Normal log, like to say what files it compiles
     WARNING = 1, // A warning
     ERROR = 2, // An error like, files that doesnt exist.
-    FATAL_ERR = 3 // Error that closes the program inmediately because of how bad it is
+    FATAL_ERR = 3 // Error that closes the program inmediately because of how bad it is (short: we fucked it up)
 };
 
 struct LogInfo {
@@ -48,7 +45,6 @@ loginfo_t* start_log_file(char* filename){
 
     info->file = fopen(filename, "a");
     if (info->file == NULL){
-        // log_to_file("The log file diesnt exists!", FATAL_ERR) ; //okay okay, this is a joke too
         return NULL;
     }
 
@@ -69,7 +65,7 @@ uint8_t is_logging(loginfo_t* info){
     return 1;
 }
 
-void log_to_file(loginfo_t* info, logtype_t type, /*char* message,*/ int count, ...){
+void log_to_file(loginfo_t* info, logtype_t type, /*char* message,*/ int count, ...){ // char* message is commented because I'm still thinking on using it
     va_list argptr;
     va_start(argptr, count); // C23 removes the use of int count
     char* EndMSG = "[%d] ";
@@ -81,7 +77,7 @@ void log_to_file(loginfo_t* info, logtype_t type, /*char* message,*/ int count, 
 
 // I'm sorry
 void clear_file(loginfo_t* info){
-    // If file open
+    // If file is open as w, it deletes its content, maybe I'm being too bold here
     freopen("compilerLog.log", "w",info->file);
     if (is_logging(info) == 1){
         info->file = freopen("compilerLog.log", "a", info->file);
