@@ -9,7 +9,7 @@
 // #define TOKENS_CHUNK_SIZE 16 
 
 /* this says if the compiler is in debug mode when started, thinking on making it changeable */
-#define IS_DEBUG_MODE
+// #define IS_DEBUG_MODE
 
 
 // this is just for Visual Studio to stop complaining. //GG Rip bozo, mine just works
