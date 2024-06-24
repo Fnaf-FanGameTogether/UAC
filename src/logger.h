@@ -30,7 +30,12 @@ uint8_t init_logging();
 void log_to_file(char* message, logtype_t type, ...);
 void clear_log();
 void stop_logging();
+uint8_t is_logging();
 
+
+
+
+//functions
 
 uint8_t is_logging() {
     if (fileOpened == NULL){
@@ -39,9 +44,6 @@ uint8_t is_logging() {
     return 1;
 }
 
-
-
-//functions
 
 uint8_t init_logging(){
     if (fileOpened != NULL){
@@ -61,7 +63,6 @@ void log_to_file(char* message, logtype_t type, ...){
     vfprintf(fileOpened, "[%d]",type, message, argptr);
     va_end(argptr);
 }
-
 
 
 // I'm sorry
