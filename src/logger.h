@@ -43,7 +43,7 @@ uint8_t init_logging(){
     }
     fileOpened = fopen("./compilerLog.log", "w");
     if (fileOpened == NULL){
-        log_to_file("The log file diesnt exists!", FATAL_ERR) ; //okay okay, this is a joke too
+        //log_to_file("The log file diesnt exists!", FATAL_ERR) ; //okay okay, this is a joke too
         return 1;
     }
     return 0;
@@ -51,6 +51,24 @@ uint8_t init_logging(){
 
 void log_to_file(char* message, logtype_t type){
     fprintf(fileOpened, "[%d]",type, message);
+}
+
+// I'm sorry
+void clear_file(){
+    // If file open
+    freopen("compilerLog.log", "w",fileOpened);
+    if (is_logging() == 1){
+        fileOpened = freopen("compilerLog.log", "a", fileOpened);
+    }
+    else{
+        stop_logging();
+    }
+    
+}
+
+void stop_logging(){
+    fclose(fileOpened);
+    fileOpened = NULL;
 }
 
 #endif
