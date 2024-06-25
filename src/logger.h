@@ -35,7 +35,7 @@ void log_to_file(loginfo_t* info, logtype_t type, /*char* message,*/ int count, 
 void clear_log(loginfo_t* info);
 void end_log_file(loginfo_t* info);
 uint8_t is_logging(loginfo_t* info);
-
+void stop_logging(loginfo_t* info);
 
 
 //functions
@@ -57,6 +57,8 @@ void end_log_file(loginfo_t* info){
     }
     free(info);
 }
+
+void stop_logging(loginfo_t* info) {} 
 
 uint8_t is_logging(loginfo_t* info){
     if (info->file == NULL){
