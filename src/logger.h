@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include <stdarg.h>
 
 
@@ -52,7 +53,7 @@ FILE *fileOpened;
 loginfo_t* start_log_file(char* filename);
 
 
-void log_to_file(loginfo_t* info, char* message, logtype_t type, ...)
+void log_to_file(loginfo_t* info, logtype_t type, char* message, ...);
 /*
  you motherfucker, tf you where thinking for `int count`
  compiler complains 'can't cast from char* to int'
@@ -136,7 +137,7 @@ uint8_t is_logging(loginfo_t* info){
     return 1;
 }
 
-void log_to_file(loginfo_t* info, char* message, logtype_t type, ...){
+void log_to_file(loginfo_t* info, logtype_t type, char* message,...){
     if(type < info->min && !(info->state & LOGGING_ACCEPT_ALL)){
         // skip unaccepted loggings
         return;
@@ -148,12 +149,14 @@ void log_to_file(loginfo_t* info, char* message, logtype_t type, ...){
     }
 
     va_list argptr;
-    va_start(argptr, type);
+    va_start(argptr, message);
+
+    // print or not
     if(!(info->state & LOGGING_NOT_PRINTING_LEVEL_AND_NAME)){
         if (info->name){
-            fprintf("[%d:%s]", type, info->name);
+            fprintf(info->file,"[%d:%s]", type, info->name);
         } else {
-            fprintf("[%d]:", type);
+            fprintf(info->file, "[%d]:", type);
         }
     }
 

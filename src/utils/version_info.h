@@ -47,7 +47,6 @@ void fprint_builtin_platform_info(FILE* fd)
 
     loginfo_t* logger = logfile_from_file(stdout, LOGGING_ACCEPT_ALL);
 
-
     // printout // CHANGE IN THE FUTURE ADDING MORE INFO
     // fprintf(fd,"32 Bit cursor enabled: %d\n", (uint32_t)plf->bIs32BitCursor); // TODO change this thing's format to print directly the byte and don't need to cast (or zero extend)
     // fprintf(fd, "Debug Build: %d\n", (uint32_t)plf->DebugEnabled);
