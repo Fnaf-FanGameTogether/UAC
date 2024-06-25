@@ -48,23 +48,14 @@ struct LogInfo {
 typedef struct LogInfo loginfo_t;
 
 
-FILE *fileOpened;
+//FILE *fileOpened; // Why is this here???
+loginfo_t* default_logger; // GG
 
 //header
 
 loginfo_t* start_log_file(char* filename);
 
-
 void log_to_file(loginfo_t* info, logtype_t type, char* message, ...);
-/*
- you motherfucker, tf you where thinking for `int count`
- compiler complains 'can't cast from char* to int'
- because it expects your int even though you're only using it as a pointer for va_args
- leave it this way until you get whatever arg order you want with this syntax
-
- use helper functions or smth idk
-*/
-// void log_to_file(loginfo_t* info, logtype_t type, /*char* message,*/ int count, ...);
 
 void clear_log(loginfo_t* info);
 void stop_logging(loginfo_t* info);
@@ -73,19 +64,35 @@ uint8_t is_logging(loginfo_t* info);
 loginfo_t* logfile_from_file(FILE* fd, uint8_t state);
 void set_logger_name(loginfo_t* info, char* name);
 void set_logger_min(loginfo_t* info, logtype_t tp);
-
+void create_default_logger();
+loginfo_t* get_default_logger();
+void destroy_default_logger();
+void check_logger(loginfo_t* info);
 
 //functions
 
+void check_logger(loginfo_t* info){
+    if (info == NULL){
+        info = get_default_logger();
+        if (info == NULL){
+            create_default_logger();
+        }
+    }
+}
+
 void stop_logging(loginfo_t* info)
 {
-    // this motherfucker's code didnt even compile because this wasnt defined
+    // this motherfucker's code didnt even compile because this wasnt defined <- Hey! In my defense you were doing the improvements, so i said. nah, let him do it.
     info->state = info->state | LOGGING_STATE_DISABLED;
     return;
 }
 
 void set_logger_name(loginfo_t* info, char* name)
 {
+    check_logger(info);
+    if (info-> name){
+        free(info->name);
+    }
     info->name = name;
     info->namesz = strlen(name); // cache name size
 }
@@ -142,10 +149,12 @@ loginfo_t* logfile_from_file(FILE* fd, uint8_t state)
 
 void set_logger_min(loginfo_t* info, logtype_t tp)
 {
+    check_logger(info);
     info->min = tp;
 }
 
 uint8_t is_logging(loginfo_t* info){
+    check_logger(info);
     if (info->file == NULL || info->state & LOGGING_STATE_DISABLED){
         return 0;
     }
@@ -155,6 +164,7 @@ uint8_t is_logging(loginfo_t* info){
 
 void log_logger_header(loginfo_t* info, logtype_t type)
 {
+    check_logger(info);
     if((info->state & LOGGING_DONT_PRINT_NAME) && (info->state & LOGGING_DONT_PRINT_LEVEL)){
         return;
     }
@@ -190,6 +200,7 @@ void log_logger_header(loginfo_t* info, logtype_t type)
 
 
 void log_to_file(loginfo_t* info, logtype_t type, char* message,...){
+    check_logger(info);
     if(type < info->min && !(info->state & LOGGING_ACCEPT_ALL)){
         // skip unaccepted loggings
         return;
@@ -213,27 +224,28 @@ void log_to_file(loginfo_t* info, logtype_t type, char* message,...){
 }
 
 
-// I'm sorry <- you better be, tf is this <- The only way my tired brain could clear files without deletion at 2 AM
+// I'm sorry <- you better be, tf is this <- The only way my tired brain could clear files without deletion at 2 AM, NVM doesnt work with how its structured now
 void clear_file(loginfo_t* info){
-    // If file open
-    freopen("compilerLog.log", "w",info->file);
-    if (is_logging(info) == 1){
-        info->file = freopen("compilerLog.log", "a", info->file);
-    }
-    else{
-        stop_logging(info);
-    }
-    
+    check_logger(info);
+
+    // Fuck it, we ball
+    // Fuck it, we ball
+    // Fuck it, we ball
+    // Fuck it, we ball
+    return;
 }
 
-// What the fuck is this?
+
 void destroy_logger(loginfo_t* info)
 {
+    if (info == NULL){
+        return;
+    }
     if(info->file != NULL)
     {
         if(info->file == stdout || info->file == stderr)
         {
-            goto memory_deallocation;
+            goto memory_deallocation; // What the fuck is this?
         }
         fclose(info->file);
     }
@@ -243,6 +255,17 @@ memory_deallocation:
         free(info->name);
     }
     free(info);
+}
+
+void create_default_logger(){
+    default_logger = logfile_from_file(stdout,0xff);
+}
+loginfo_t* get_default_logger(){
+    return default_logger;
+}
+void destroy_default_logger(){
+    destroy_logger(default_logger);
+    default_logger = NULL;
 }
 
 #endif
