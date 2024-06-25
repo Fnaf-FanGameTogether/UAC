@@ -72,11 +72,9 @@ void check_logger(loginfo_t* info);
 //functions
 
 void check_logger(loginfo_t* info){
+    info = get_default_logger(); 
     if (info == NULL){
-        info = get_default_logger();
-        if (info == NULL){
-            create_default_logger();
-        }
+        create_default_logger();
     }
 }
 
