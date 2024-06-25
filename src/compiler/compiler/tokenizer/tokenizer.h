@@ -32,6 +32,22 @@ struct tokenarr_s {
 
 typedef struct tokenarr_s tokenarr_t;
 
+struct tokenizer_reader_s {
+	 uint8_t type;
+	 FILE* fh; // TODO: pipelines and stuff like that
+
+	 uint8_t eof; // flag raised by read_char() to mark EOF
+};
+
+typedef struct tokenizer_reader_s tokenizer_reader_t;
+
+struct tokenizer_s {
+	 tokenarr_t* t_arr;
+	 pos_t* curr_pos;
+
+	 tokenizer_reader_t* reader;
+};
+
 
 // function declarations
 tokens_chunk_t* create_tokens_chunk();
@@ -41,13 +57,43 @@ void _delete_token(tokens_chunk_t* cht);
 void _create_tokarr(tokenarr_t** arr);
 void _destroy_tokarr(tokenarr_t* arr);
 
+char read_char(tokenizer_reader_t* reader);
+uint8_t eof(tokenizer_reader_t* reader);
 
-// this is important 
+// this is important
 uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos_t* pos);
 
 
 
 // functions code
+
+
+char read_char(tokenizer_reader_t* reader, uint8_t* valid)
+{
+	 *valid = 0; // set success as true
+	 // TODO: more logic to check if we're reading the correct type of input
+	 if(reader == NULL || reader->fh == NULL)
+	 {
+			// womp womp
+			*valid = 1;
+			return "\00";
+	 }
+	 char bf;
+
+	 // most probably
+	 if(fread(&bf, 1,1,reader->fh)){
+			reader->eof = 1;
+			*valid = 2;
+			return '\00';
+	 }
+
+	 return bf;
+}
+
+uint8_t eof(tokenizer_reader_t* reader){
+	 return reader->eof;
+}
+
 tokens_chunk_t* create_tokens_chunk()
 {
     tokens_chunk_t* chunk = (tokens_chunk_t*)malloc(sizeof(tokens_chunk_t));
@@ -62,7 +108,7 @@ tokens_chunk_t* create_tokens_chunk()
     {
         create_unready_token(chunk->toks + i);
     }
-    
+
     chunk->cwt = 0; // Current Working Token
 
     chunk->next = NULL;
@@ -74,7 +120,7 @@ void destroy_tokens_chunk(tokens_chunk_t* cht)
 {
     for(uint8_t i=0; i < TOKENS_CHUNK_SIZE; i++)
     {
-        // token_t *tok = chunks->toks + i 
+        // token_t *tok = chunks->toks + i
         destroy_token(cht->toks + i);
     }
 
@@ -140,11 +186,11 @@ void _destroy_tokarr(tokenarr_t* arr)
     while(!sb)
     {
         // can't say curr->next because destroy_tokens_chunk deallocates that pointer as well
-        
+
         if(curr->next == NULL){
             sb = 1;
         }
-        
+
         destroy_tokens_chunk(curr);
 
         if (!sb){
@@ -194,6 +240,7 @@ uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos
     }
     return 1;
 }
+
 
 
 

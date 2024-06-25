@@ -20,10 +20,18 @@ enum TypeOfLog {
     FATAL_ERR = 3 // Error that closes the program inmediately because of how bad it is
 };
 
+enum LogInfoState {
+    LOGGING_STATE_DISABLED = 1,
+    LOGGING_STATE_ENABLED  = 0
+};
+
+typedef enum LogInfoState logstate_t;
+
 struct LogInfo {
     FILE *file;
 
     // stuff we will prob use
+    logstate_t state;
 };
 
 typedef enum TypeOfLog logtype_t;
@@ -37,11 +45,17 @@ loginfo_t* start_log_file(char* filename);
 void log_to_file(loginfo_t* info, logtype_t type, /*char* message,*/ int count, ...);
 void clear_log(loginfo_t* info);
 void end_log_file(loginfo_t* info);
+void stop_logging(loginfo_t* info);
 uint8_t is_logging(loginfo_t* info);
 
-
-
 //functions
+
+void stop_logging(loginfo_t* info)
+{
+    // this motherfucker's code didnt even compile because this wasnt defined
+    info->state = info->state | LOGGING_STATE_DISABLED;
+    return;
+}
 
 loginfo_t* start_log_file(char* filename){
     loginfo_t* info = (loginfo_t*)malloc(sizeof(loginfo_t));
@@ -51,9 +65,10 @@ loginfo_t* start_log_file(char* filename){
         // log_to_file("The log file diesnt exists!", FATAL_ERR) ; //okay okay, this is a joke too
         return NULL;
     }
-
+    info->state = LOGGING_STATE_ENABLED;
     return info;
 }
+
 void end_log_file(loginfo_t* info){
     if (is_logging(info)){
         fclose(info->file);
@@ -63,7 +78,7 @@ void end_log_file(loginfo_t* info){
 }
 
 uint8_t is_logging(loginfo_t* info){
-    if (info->file == NULL){
+    if (info->file == NULL || info->state & LOGGING_STATE_DISABLED){
         return 0;
     }
     return 1;
@@ -71,10 +86,10 @@ uint8_t is_logging(loginfo_t* info){
 
 void log_to_file(loginfo_t* info, logtype_t type, /*char* message,*/ int count, ...){
     va_list argptr;
+
     va_start(argptr, count); // C23 removes the use of int count
     char* EndMSG = "[%d] ";
     vfprintf(info->file, EndMSG, /*message,*/ argptr);
-
     va_end(argptr);
 }
 
@@ -87,7 +102,7 @@ void clear_file(loginfo_t* info){
         info->file = freopen("compilerLog.log", "a", info->file);
     }
     else{
-        stop_logging();
+        stop_logging(info);
     }
     
 }
