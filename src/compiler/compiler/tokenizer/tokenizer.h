@@ -49,6 +49,10 @@ struct tokenizer_s {
 };
 
 
+// static data declarations
+char NULL_TERMINATOR = '\00';
+
+
 // function declarations
 tokens_chunk_t* create_tokens_chunk();
 void destroy_tokens_chunk(tokens_chunk_t* cht);
@@ -57,7 +61,7 @@ void _delete_token(tokens_chunk_t* cht);
 void _create_tokarr(tokenarr_t** arr);
 void _destroy_tokarr(tokenarr_t* arr);
 
-char read_char(tokenizer_reader_t* reader);
+char read_char(tokenizer_reader_t* reader, uint8_t* valid);
 uint8_t eof(tokenizer_reader_t* reader);
 
 // this is important
@@ -74,16 +78,16 @@ char read_char(tokenizer_reader_t* reader, uint8_t* valid)
 	// TODO: more logic to check if we're reading the correct type of input
 	if(reader == NULL || reader->fh == NULL)
 	{
-	// womp womp
-	*valid = 1;
-	return "\00";
+	    // womp womp
+	    *valid = 1;
+	    return NULL_TERMINATOR;
 	}
 	char bf;
 	// most probably
 	if(fread(&bf, 1,1,reader->fh)){
        reader->eof = 1;
        *valid = 2;
-       return '\00';
+       return NULL_TERMINATOR;
 	}
 	return bf;
 }
