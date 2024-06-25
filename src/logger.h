@@ -100,6 +100,10 @@ loginfo_t* start_log_file(char* filename){
         return NULL;
     }
     info->state = LOGGING_STATE_ENABLED;
+
+    info->name = NULL;
+    info->namesz = 0;
+
     return info;
 }
 
@@ -119,6 +123,8 @@ loginfo_t* logfile_from_file(FILE* fd, uint8_t state)
     
     info->file = fd;
     info->state = state;
+    info->name = NULL;
+    info->namesz = 0;
     return info;
 }
 
@@ -153,7 +159,7 @@ void log_to_file(loginfo_t* info, logtype_t type, char* message,...){
 
     // print or not
     if(!(info->state & LOGGING_NOT_PRINTING_LEVEL_AND_NAME)){
-        if (info->name){
+        if (info->name != NULL){
             fprintf(info->file,"[%d:%s]", type, info->name);
         } else {
             fprintf(info->file, "[%d]:", type);
