@@ -85,7 +85,7 @@ void clear_file(loginfo_t* info){
         info->file = freopen("compilerLog.log", "a", info->file);
     }
     else{
-        stop_logging();
+        stop_logging(info);
     }
     
 }
