@@ -45,7 +45,9 @@ void fprint_builtin_platform_info(FILE* fd)
     builtin_platform_t* plf = _init_builtin_platform_object(); // manuel, rename _init_object to _init_builtin_platform_memory_space or smth like that
     populate_bplatform_info(plf);
 
-    loginfo_t* logger = logfile_from_file(fd, LOGGING_ACCEPT_ALL | LOGGING_NOT_PRINTING_LEVEL_AND_NAME);
+    loginfo_t* logger = logfile_from_file(fd, LOGGING_ACCEPT_ALL | LOGGING_DONT_PRINT_LEVEL);
+
+    set_logger_name(logger, "{ version-info-descriptor }");
 
     // printout // CHANGE IN THE FUTURE ADDING MORE INFO
     // fprintf(fd,"32 Bit cursor enabled: %d\n", (uint32_t)plf->bIs32BitCursor); // TODO change this thing's format to print directly the byte and don't need to cast (or zero extend)

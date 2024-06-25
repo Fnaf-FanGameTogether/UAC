@@ -15,17 +15,19 @@
 // #define str char* // It's just a prank bro
 
 enum TypeOfLog {
-    NORMAL = 0, // Normal log, like to say what files it compiles
-    WARNING = 1, // A warning
-    ERROR = 2, // An error like, files that doesnt exist.
-    FATAL_ERR = 3 // Error that closes the program inmediately because of how bad it is
+    DEBUG = 0,  // you forgot debug
+    NORMAL = 1, // Normal log, like to say what files it compiles
+    WARNING = 2, // A warning
+    ERROR = 3, // An error like, files that doesnt exist.
+    FATAL_ERR = 4 // Error that closes the program inmediately because of how bad it is
 };
 
 enum LogInfoState {
     LOGGING_STATE_DISABLED = 1,
     LOGGING_STATE_ENABLED  = 0,
     LOGGING_ACCEPT_ALL     = 2, // log every message, no matter of the level
-    LOGGING_NOT_PRINTING_LEVEL_AND_NAME = 4
+    LOGGING_DONT_PRINT_LEVEL = 4,
+    LOGGING_DONT_PRINT_NAME  = 8
 };
 
 typedef enum LogInfoState logstate_t;
@@ -70,7 +72,9 @@ void stop_logging(loginfo_t* info);
 uint8_t is_logging(loginfo_t* info);
 
 loginfo_t* logfile_from_file(FILE* fd, uint8_t state);
-void set_name(loginfo_t* info, char* name);
+void set_logger_name(loginfo_t* info, char* name);
+void set_logger_min(loginfo_t* info, logtype_t tp);
+
 
 //functions
 
@@ -81,7 +85,7 @@ void stop_logging(loginfo_t* info)
     return;
 }
 
-void set_name(loginfo_t* info, char* name)
+void set_logger_name(loginfo_t* info, char* name)
 {
     info->name = name;
     info->namesz = strlen(name); // cache name size
@@ -103,6 +107,7 @@ loginfo_t* start_log_file(char* filename){
 
     info->name = NULL;
     info->namesz = 0;
+    info->min = WARNING;
 
     return info;
 }
@@ -125,7 +130,15 @@ loginfo_t* logfile_from_file(FILE* fd, uint8_t state)
     info->state = state;
     info->name = NULL;
     info->namesz = 0;
+    info->min = WARNING;
+
     return info;
+}
+
+
+void set_logger_min(loginfo_t* info, logtype_t tp)
+{
+    info->min = tp;
 }
 
 void end_log_file(loginfo_t* info){
@@ -143,6 +156,39 @@ uint8_t is_logging(loginfo_t* info){
     return 1;
 }
 
+
+void log_logger_header(loginfo_t* info, logtype_t type)
+{
+    if((info->state & LOGGING_DONT_PRINT_NAME) && (info->state & LOGGING_DONT_PRINT_LEVEL)){
+        return;
+    }
+    // print start of the header
+    fprintf(info->file, "[ ");
+
+    if(info->state & LOGGING_DONT_PRINT_NAME){
+        // since both would've returned, this is print only type
+        fprintf(info->file,"%d ]:", type);
+        return;
+    }
+    if (info->state & LOGGING_DONT_PRINT_NAME)
+    {
+        // since both would've returned, this is print only name
+        if(info->name == NULL)
+        {
+            // whatever
+            return;
+        }
+        fprintf(info->file, "%s ]:", info->name);
+        return;
+    }
+    if(info->name != NULL){
+        fprintf(info->file, "%d %s ]:", type, info->name);
+        return;
+    }
+    fprintf(info->file, "%d ]:", type);
+}
+
+
 void log_to_file(loginfo_t* info, logtype_t type, char* message,...){
     if(type < info->min && !(info->state & LOGGING_ACCEPT_ALL)){
         // skip unaccepted loggings
@@ -157,15 +203,10 @@ void log_to_file(loginfo_t* info, logtype_t type, char* message,...){
     va_list argptr;
     va_start(argptr, message);
 
-    // print or not
-    if(!(info->state & LOGGING_NOT_PRINTING_LEVEL_AND_NAME)){
-        if (info->name != NULL){
-            fprintf(info->file,"[%d:%s]", type, info->name);
-        } else {
-            fprintf(info->file, "[%d]:", type);
-        }
-    }
+    log_logger_header(info, type);
 
+    // print or not
+    
     vfprintf(info->file, message, argptr);
 
     va_end(argptr);
