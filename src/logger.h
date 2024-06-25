@@ -114,6 +114,11 @@ loginfo_t* start_log_file(char* filename){
 
 loginfo_t* logfile_from_file(FILE* fd, uint8_t state)
 {
+    if(fd == stdin)
+    {
+        // not supported, don't even bother
+        return NULL;
+    }
     if(state == 0xFF)
     {
         // not specified
@@ -170,7 +175,7 @@ void log_logger_header(loginfo_t* info, logtype_t type)
         fprintf(info->file,"%d ]:", type);
         return;
     }
-    if (info->state & LOGGING_DONT_PRINT_NAME)
+    if (info->state & LOGGING_DONT_PRINT_LEVEL)
     {
         // since both would've returned, this is print only name
         if(info->name == NULL)
@@ -225,4 +230,24 @@ void clear_file(loginfo_t* info){
     }
     
 }
+
+
+void destroy_logger(loginfo_t* info)
+{
+    if(info->file != NULL)
+    {
+        if(info->file == stdout || info->file == stderr)
+        {
+            goto memory_deallocation;
+        }
+        fclose(info->file);
+    }
+memory_deallocation:
+    if(info->name != NULL)
+    {
+        free(info->name);
+    }
+    free(info);
+}
+
 #endif
