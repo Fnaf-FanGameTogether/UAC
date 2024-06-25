@@ -1,3 +1,4 @@
 
 /build/*
 auto_push_git.py
+git_reload.bat
