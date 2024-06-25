@@ -77,8 +77,9 @@ pos_t* copy_pos(pos_t* og)
     if (new == NULL){
         return NULL;
     }
+
     // memcpy(new, og, sizeof(pos_t));
-    
+
     new->cursor  = og->cursor;
     new->line    = og->line;
     new->in_line = og->in_line;

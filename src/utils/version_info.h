@@ -45,10 +45,16 @@ void fprint_builtin_platform_info(FILE* fd)
     builtin_platform_t* plf = _init_builtin_platform_object(); // manuel, rename _init_object to _init_builtin_platform_memory_space or smth like that
     populate_bplatform_info(plf);
 
-    // printout // CHANGE IN THE FUTURE ADDING MORE INFO
-    fprintf(fd,"32 Bit cursor enabled: %d\n", (uint32_t)plf->bIs32BitCursor); // TODO change this thing's format to print directly the byte and don't need to cast (or zero extend)
-    fprintf(fd, "Debug Build: %d\n", (uint32_t)plf->DebugEnabled);
+    loginfo_t* logger = logfile_from_file(stdout, LOGGING_ACCEPT_ALL);
 
+
+    // printout // CHANGE IN THE FUTURE ADDING MORE INFO
+    // fprintf(fd,"32 Bit cursor enabled: %d\n", (uint32_t)plf->bIs32BitCursor); // TODO change this thing's format to print directly the byte and don't need to cast (or zero extend)
+    // fprintf(fd, "Debug Build: %d\n", (uint32_t)plf->DebugEnabled);
+
+    log_to_file(logger,NORMAL,"32 Bit cursor enabled: %d\n", (uint32_t)plf->bIs32BitCursor); // TODO change this thing's format to print directly the byte and don't need to cast (or zero extend)
+    log_to_file(logger,NORMAL, "Debug Build: %d\n", (uint32_t)plf->DebugEnabled);
+    
     return;
 }
 

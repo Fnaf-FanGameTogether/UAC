@@ -46,6 +46,9 @@ struct tokenizer_s {
 	 pos_t* curr_pos;
 
 	 tokenizer_reader_t* reader;
+
+     char* name;
+     uint16_t tokenizer_name;
 };
 
 
@@ -183,7 +186,7 @@ void _create_tokarr(tokenarr_t** arr)
 
 void _destroy_tokarr(tokenarr_t* arr)
 {
-    tokens_chunk_t* curr= arr->head;
+    tokens_chunk_t* curr = arr->head;
     uint8_t sb=0;
     while(!sb)
     {
