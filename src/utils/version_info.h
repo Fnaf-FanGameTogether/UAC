@@ -14,12 +14,12 @@ struct builtin_platform_s {
 typedef struct builtin_platform_s builtin_platform_t;
 
 // function declarations
-builtin_platform_t* _init_object();
+builtin_platform_t* _init_builtin_platform_object();
 void populate_bplatform_info(builtin_platform_t* plf);
 void fprint_builtin_platform_info(FILE* fd);
 
 // functions code
-builtin_platform_t* _init_object()
+builtin_platform_t* _init_builtin_platform_object()
 {
     builtin_platform_t* plf = (builtin_platform_t*)malloc(sizeof(builtin_platform_t));
 
@@ -42,7 +42,7 @@ void populate_bplatform_info(builtin_platform_t* plf)
 
 void fprint_builtin_platform_info(FILE* fd)
 {
-    builtin_platform_t* plf = _init_object(); // manuel, rename _init_object to _init_builtin_platform_memory_space or smth like that
+    builtin_platform_t* plf = _init_builtin_platform_object(); // manuel, rename _init_object to _init_builtin_platform_memory_space or smth like that
     populate_bplatform_info(plf);
 
     // printout // CHANGE IN THE FUTURE ADDING MORE INFO
