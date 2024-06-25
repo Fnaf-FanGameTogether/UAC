@@ -67,7 +67,6 @@ void log_to_file(loginfo_t* info, logtype_t type, char* message, ...);
 // void log_to_file(loginfo_t* info, logtype_t type, /*char* message,*/ int count, ...);
 
 void clear_log(loginfo_t* info);
-void end_log_file(loginfo_t* info);
 void stop_logging(loginfo_t* info);
 uint8_t is_logging(loginfo_t* info);
 
@@ -146,14 +145,6 @@ void set_logger_min(loginfo_t* info, logtype_t tp)
     info->min = tp;
 }
 
-void end_log_file(loginfo_t* info){
-    if (is_logging(info)){
-        fclose(info->file);
-        info->file = NULL;
-    }
-    free(info);
-}
-
 uint8_t is_logging(loginfo_t* info){
     if (info->file == NULL || info->state & LOGGING_STATE_DISABLED){
         return 0;
@@ -181,12 +172,16 @@ void log_logger_header(loginfo_t* info, logtype_t type)
         if(info->name == NULL)
         {
             // whatever
+            // since we printed '[' we shall at least close it
+            fprintf(info->file, "]:");
             return;
         }
         fprintf(info->file, "%s ]:", info->name);
         return;
     }
+    // by here print both
     if(info->name != NULL){
+        //
         fprintf(info->file, "%d %s ]:", type, info->name);
         return;
     }
