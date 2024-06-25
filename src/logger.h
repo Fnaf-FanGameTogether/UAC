@@ -104,7 +104,6 @@ loginfo_t* start_log_file(char* filename){
 
     info->file = fopen(filename, "a");
     if (info->file == NULL){
-        // log_to_file("The log file diesnt exists!", FATAL_ERR) ; //okay okay, this is a joke too
         return NULL;
     }
     info->state = LOGGING_STATE_ENABLED;
@@ -171,7 +170,7 @@ void log_logger_header(loginfo_t* info, logtype_t type)
 
     if(info->state & LOGGING_DONT_PRINT_NAME){
         // since both would've returned, this is print only type
-        fprintf(info->file,"%d ]:", type);
+        fprintf(info->file,"%d ]: ", type);
         return;
     }
     if (info->state & LOGGING_DONT_PRINT_LEVEL)
@@ -181,19 +180,19 @@ void log_logger_header(loginfo_t* info, logtype_t type)
         {
             // whatever
             // since we printed '[' we shall at least close it
-            fprintf(info->file, "]:");
+            fprintf(info->file, "]: ");
             return;
         }
-        fprintf(info->file, "%s ]:", info->name);
+        fprintf(info->file, "%s ]: ", info->name);
         return;
     }
     // by here print both
     if(info->name != NULL){
         //
-        fprintf(info->file, "%d %s ]:", type, info->name);
+        fprintf(info->file, "%d %s ]: ", type, info->name);
         return;
     }
-    fprintf(info->file, "%d ]:", type);
+    fprintf(info->file, "%d ]: ", type);
 }
 
 
@@ -237,6 +236,7 @@ void clear_file(loginfo_t* info){
 void destroy_logger(loginfo_t* info)
 {
     if (info == NULL){
+        destroy_default_logger();
         return;
     }
     if(info->file != NULL)

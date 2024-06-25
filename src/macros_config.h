@@ -8,7 +8,7 @@
 /* this is the number of tokens to allocate in a single tokens_chunk, the rest is linked-listed */
 // #define TOKENS_CHUNK_SIZE 16 
 
-/* this says if the compiler is in debug mode when started, thinking on making it changeable */
+/* this says if the compiler is in debug mode when started */
 // #define IS_DEBUG_MODE
 
 
