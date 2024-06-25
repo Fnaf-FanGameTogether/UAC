@@ -70,28 +70,26 @@ uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos
 
 char read_char(tokenizer_reader_t* reader, uint8_t* valid)
 {
-	 *valid = 0; // set success as true
-	 // TODO: more logic to check if we're reading the correct type of input
-	 if(reader == NULL || reader->fh == NULL)
-	 {
-			// womp womp
-			*valid = 1;
-			return "\00";
-	 }
-	 char bf;
-
-	 // most probably
-	 if(fread(&bf, 1,1,reader->fh)){
-			reader->eof = 1;
-			*valid = 2;
-			return '\00';
-	 }
-
-	 return bf;
+	*valid = 0; // set success as true
+	// TODO: more logic to check if we're reading the correct type of input
+	if(reader == NULL || reader->fh == NULL)
+	{
+	// womp womp
+	*valid = 1;
+	return "\00";
+	}
+	char bf;
+	// most probably
+	if(fread(&bf, 1,1,reader->fh)){
+       reader->eof = 1;
+       *valid = 2;
+       return '\00';
+	}
+	return bf;
 }
 
 uint8_t eof(tokenizer_reader_t* reader){
-	 return reader->eof;
+	return reader->eof;
 }
 
 tokens_chunk_t* create_tokens_chunk()
