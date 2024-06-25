@@ -42,7 +42,7 @@ void populate_bplatform_info(builtin_platform_t* plf)
 
 void fprint_builtin_platform_info(FILE* fd)
 {
-    builtin_platform_t* plf = _init_builtin_platform_object(); // manuel, rename _init_object to _init_builtin_platform_memory_space or smth like that
+    builtin_platform_t* plf = _init_builtin_platform_object(); 
     populate_bplatform_info(plf);
 
     loginfo_t* logger = logfile_from_file(fd, LOGGING_ACCEPT_ALL | LOGGING_DONT_PRINT_LEVEL);

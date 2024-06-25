@@ -213,7 +213,7 @@ void log_to_file(loginfo_t* info, logtype_t type, char* message,...){
 }
 
 
-// I'm sorry <- you better be, tf is this
+// I'm sorry <- you better be, tf is this <- The only way my tired brain could clear files without deletion at 2 AM
 void clear_file(loginfo_t* info){
     // If file open
     freopen("compilerLog.log", "w",info->file);
@@ -226,7 +226,7 @@ void clear_file(loginfo_t* info){
     
 }
 
-
+// What the fuck is this?
 void destroy_logger(loginfo_t* info)
 {
     if(info->file != NULL)
