@@ -23,11 +23,11 @@ enum TypeOfLog {
 };
 
 enum LogInfoState {
-    LOGGING_STATE_DISABLED = 1,
-    LOGGING_STATE_ENABLED  = 0,
+    LOGGING_STATE_DISABLED = 1, // The logger is disabled
+    LOGGING_STATE_ENABLED  = 0, // The logger is enabled
     LOGGING_ACCEPT_ALL     = 2, // log every message, no matter of the level
-    LOGGING_DONT_PRINT_LEVEL = 4,
-    LOGGING_DONT_PRINT_NAME  = 8
+    LOGGING_DONT_PRINT_LEVEL = 4, //Doesnt print the level of the msg
+    LOGGING_DONT_PRINT_NAME  = 8  //Doesnt print the name of the logger
 };
 
 typedef enum LogInfoState logstate_t;
@@ -72,10 +72,14 @@ void check_logger(loginfo_t** info);
 //functions
 
 void check_logger(loginfo_t** info){
-    *info = get_default_logger(); 
     if (*info == NULL){
-        create_default_logger();
+        if (get_default_logger() == NULL){
+            create_default_logger();
+        }
+
+        *info = get_default_logger();
     }
+
 }
 
 void stop_logging(loginfo_t* info)
@@ -131,6 +135,7 @@ loginfo_t* logfile_from_file(FILE* fd, uint8_t state)
     loginfo_t* info = (loginfo_t*)malloc(sizeof(loginfo_t));
 
     if(info == NULL){
+        printf("The logger couldnt be created");
         return NULL;
     }
     
