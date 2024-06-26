@@ -64,7 +64,7 @@ uint8_t is_logging(loginfo_t* info);
 loginfo_t* logfile_from_file(FILE* fd, uint8_t state);
 void set_logger_name(loginfo_t* info, char* name);
 void set_logger_min(loginfo_t* info, logtype_t tp);
-void create_default_logger();
+loginfo_t* create_default_logger();
 loginfo_t* get_default_logger();
 void destroy_default_logger();
 void check_logger(loginfo_t** info);
@@ -73,11 +73,18 @@ void check_logger(loginfo_t** info);
 
 void check_logger(loginfo_t** info){
     if (*info == NULL){
+        // TWO GET DEFAULT CALLS, AND THIS HAS INCONSISTENT IDENT FOR SOME REASON (at least my version, didnt notice it on github)
+        /*
         if (get_default_logger() == NULL){
             create_default_logger();
         }
-
         *info = get_default_logger();
+        */
+        *info = get_default_logger();
+        if(*info == NULL)
+        {
+            *info = create_default_logger();
+        }
     }
 
 }
@@ -260,8 +267,9 @@ memory_deallocation:
     free(info);
 }
 
-void create_default_logger(){
+loginfo_t* create_default_logger(){
     default_logger = logfile_from_file(stdout,0xff);
+    return default_logger;
 }
 loginfo_t* get_default_logger(){
     return default_logger;
