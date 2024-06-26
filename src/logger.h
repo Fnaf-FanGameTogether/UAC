@@ -67,13 +67,13 @@ void set_logger_min(loginfo_t* info, logtype_t tp);
 void create_default_logger();
 loginfo_t* get_default_logger();
 void destroy_default_logger();
-void check_logger(loginfo_t* info);
+void check_logger(loginfo_t** info);
 
 //functions
 
-void check_logger(loginfo_t* info){
-    info = get_default_logger(); 
-    if (info == NULL){
+void check_logger(loginfo_t** info){
+    *info = get_default_logger(); 
+    if (*info == NULL){
         create_default_logger();
     }
 }
@@ -87,7 +87,7 @@ void stop_logging(loginfo_t* info)
 
 void set_logger_name(loginfo_t* info, char* name)
 {
-    check_logger(info);
+    check_logger(&info);
     if (info-> name){
         free(info->name);
     }
@@ -146,12 +146,12 @@ loginfo_t* logfile_from_file(FILE* fd, uint8_t state)
 
 void set_logger_min(loginfo_t* info, logtype_t tp)
 {
-    check_logger(info);
+    check_logger(&info);
     info->min = tp;
 }
 
 uint8_t is_logging(loginfo_t* info){
-    check_logger(info);
+    check_logger(&info);
     if (info->file == NULL || info->state & LOGGING_STATE_DISABLED){
         return 0;
     }
@@ -161,7 +161,7 @@ uint8_t is_logging(loginfo_t* info){
 
 void log_logger_header(loginfo_t* info, logtype_t type)
 {
-    check_logger(info);
+    check_logger(&info);
     if((info->state & LOGGING_DONT_PRINT_NAME) && (info->state & LOGGING_DONT_PRINT_LEVEL)){
         return;
     }
@@ -197,7 +197,7 @@ void log_logger_header(loginfo_t* info, logtype_t type)
 
 
 void log_to_file(loginfo_t* info, logtype_t type, char* message,...){
-    check_logger(info);
+    check_logger(&info);
     if(type < info->min && !(info->state & LOGGING_ACCEPT_ALL)){
         // skip unaccepted loggings
         return;
@@ -223,7 +223,7 @@ void log_to_file(loginfo_t* info, logtype_t type, char* message,...){
 
 // I'm sorry <- you better be, tf is this <- The only way my tired brain could clear files without deletion at 2 AM, NVM doesnt work with how its structured now
 void clear_file(loginfo_t* info){
-    check_logger(info);
+    check_logger(&info);
 
     // Fuck it, we ball
     // Fuck it, we ball
