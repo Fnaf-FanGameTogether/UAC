@@ -9,6 +9,10 @@
 struct builtin_platform_s {
     uint8_t bIs32BitCursor;
     uint8_t DebugEnabled;
+
+
+    // extra parameters
+    uint8_t nTokensChunkSize;
 };
 
 typedef struct builtin_platform_s builtin_platform_t;
@@ -37,6 +41,7 @@ void populate_bplatform_info(builtin_platform_t* plf)
     #else
     plf->DebugEnabled = 0;
     #endif
+    plf->nTokensChunkSize = TOKENS_CHUNK_SIZE;
 }
 
 
@@ -56,6 +61,8 @@ void fprint_builtin_platform_info(FILE* fd)
     // change to logger w logger formatting
     log_to_file(logger,NORMAL,"32 Bit cursor enabled: %d\n", (uint32_t)plf->bIs32BitCursor); // TODO change this thing's format to print directly the byte and don't need to cast (or zero extend)
     log_to_file(logger,NORMAL, "Debug Build: %d\n", (uint32_t)plf->DebugEnabled);
+    
+    log_to_file(logger,NORMAL, "Tokens chunk size: %d\n", (uint32_t)plf->nTokensChunkSize);
     
 
     // shutdown

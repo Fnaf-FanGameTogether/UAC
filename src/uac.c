@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include "./macros_config.h"
 #include "logger.h"
-#include "utils/version_info.h"
-
 
 #include "argparsing/argparsing.h"
 #include "compiler/compiler/tokenizer/tokenizer.h"
 
+
+#include "utils/version_info.h"
 
 int main(int argc, char** argv)
 {

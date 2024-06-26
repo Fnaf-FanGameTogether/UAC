@@ -3,12 +3,15 @@
 
 
 /* this sets all cursor to use 32 bit length instead of 64 bit length for file cursors, and for other stuff*/
+// flag
 // #define __USE32BIT_LENGTH
 
 /* this is the number of tokens to allocate in a single tokens_chunk, the rest is linked-listed */
-// #define TOKENS_CHUNK_SIZE 16 
+// uint8_t
+// #define TOKENS_CHUNK_SIZE ~~
 
 /* this says if the compiler is in debug mode when started */
+// flag
 // #define IS_DEBUG_MODE
 
 

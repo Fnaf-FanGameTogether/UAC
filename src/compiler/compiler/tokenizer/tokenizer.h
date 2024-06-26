@@ -5,9 +5,6 @@
 #include "utils/length.h"
 
 
-#ifndef TOKENS_CHUNK_SIZE
-# define TOKENS_CHUNK_SIZE 16
-#endif
 
 
 struct tokens_chunk_s
@@ -211,14 +208,19 @@ void _destroy_tokarr(tokenarr_t* arr)
 uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos_t* pos)
 {
     // Wow.
-    // WHY??? 
+    // WHY???
     /* 
-     if(!push_token(...))
-     {
-        // failed
-     } else {
-        // succeded
-     }
+
+    void next_token(){
+        ...
+        if(push_token(...))
+        {
+            ...
+            return;
+        }
+        error(...);
+        return;
+    }
     */
     uint8_t state;
     if(arr == NULL)

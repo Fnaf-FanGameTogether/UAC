@@ -6,6 +6,9 @@
 
 #include "utils/length.h"
 
+#ifndef TOKENS_CHUNK_SIZE
+# define TOKENS_CHUNK_SIZE 16
+#endif
 
 
 enum TokenType {

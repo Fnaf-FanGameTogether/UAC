@@ -68,10 +68,7 @@ uint16_t pdhandle_type(pdhandle_t handle);
 gpi_t*   create_gpi();
 void init_gpi_args(gpi_t* gpi, uint32_t argc, char** argv);
 
-
 void destroy_gpi(gpi_t* gpi);
-
-
 
 
 // Function code
@@ -105,7 +102,7 @@ void init_gpi_args(
 void destroy_gpi(gpi_t* gpi)
 {
     // todo: more logic for handle info
-    
+
     // you probably don't wanna try deallocate argv
     free(gpi);
 }
