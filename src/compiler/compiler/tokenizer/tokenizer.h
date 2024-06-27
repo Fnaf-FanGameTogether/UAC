@@ -2,6 +2,7 @@
 #define _TOKENIZER_H_
 
 #include "./token.h"
+#include "logger.h"
 #include "utils/length.h"
 
 
@@ -44,10 +45,12 @@ struct tokenizer_s {
 
 	 tokenizer_reader_t* reader;
 
-     char* name;
+     char*    name;
      uint16_t tokenizer_name;
+     loginfo_t* logger;
 };
 
+typedef struct tokenizer_s tokenizer_t;
 
 // static data declarations
 char NULL_TERMINATOR = '\00';
@@ -248,7 +251,6 @@ uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos
     }
     return 1;
 }
-
 
 
 

@@ -268,7 +268,7 @@ memory_deallocation:
 }
 
 loginfo_t* create_default_logger(){
-    default_logger = logfile_from_file(stdout,0xff);
+    default_logger = logfile_from_file(stdout, 0xff);
     return default_logger;
 }
 loginfo_t* get_default_logger(){

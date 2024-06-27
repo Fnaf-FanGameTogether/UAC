@@ -22,9 +22,15 @@ int main(int argc, char** argv)
     fprint_builtin_platform_info(stdout);
 
 
+    loginfo_t* logger = NULL;
 
+    check_logger(&logger); // automatically initialize it
 
+    logger->state |= LOGGING_ACCEPT_ALL;
 
+    log_to_file(logger, NORMAL, "arg count: %d\n", argc);
+
+    destroy_default_logger();
     destroy_gpi(args);
     return 0;
 }
