@@ -45,8 +45,8 @@ struct tokenizer_s {
 
 	 tokenizer_reader_t* reader;
 
-     char*    name;
-     uint16_t tokenizer_name;
+     char*      name;
+     uint16_t   tokenizer_name;
      loginfo_t* logger;
 };
 
@@ -87,7 +87,7 @@ char read_char(tokenizer_reader_t* reader, uint8_t* valid)
 	}
 	char bf;
 	// most probably
-	if(fread(&bf, 1,1,reader->fh)){
+	if(fread(&bf, 1,1, reader->fh)){
        reader->eof = 1;
        *valid = 2;
        return NULL_TERMINATOR;

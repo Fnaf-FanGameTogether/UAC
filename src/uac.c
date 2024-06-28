@@ -5,7 +5,7 @@
 #include "argparsing/argparsing.h"
 #include "compiler/compiler/tokenizer/tokenizer.h"
 
-
+// this has to be imported last for all configuration loading to have finished
 #include "utils/version_info.h"
 
 int main(int argc, char** argv)
