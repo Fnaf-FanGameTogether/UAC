@@ -4,7 +4,7 @@
 
 // func declarations
 void parse_debug_mode(gpi_t* gpi);
-debug_info_t* create_debug();
+// debug_info_t* create_debug();
 
 // func code
 

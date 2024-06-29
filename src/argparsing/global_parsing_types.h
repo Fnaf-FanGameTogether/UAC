@@ -100,18 +100,19 @@ void init_gpi_args(
 }
 
 void get_gpi_action(gpi_t* gpi){
-    printf("Argument 0: %s\n", gpi->argv[0]);
     if(gpi->argc < 2){
         gpi->act = COMPILING; // default
         return;
     }
 
-    printf("Argument 1: %s\n", gpi->argv[1]);
+    // printf("Argument 1: %s\n", gpi->argv[1]);
     if (!strcmp(gpi->argv[1], "-d")){
-        printf("DEBUG MODE BITCH\n"); // Bucking feach
-        // gpi->action = DEBUGGING;
+        // printf("DEBUG MODE BITCH\n"); // Bucking feach
+        gpi->act = DEBUGGING;
         return;
     }
+    gpi->act = COMPILING;
+    return;
 }
 
 void destroy_gpi(gpi_t* gpi)
