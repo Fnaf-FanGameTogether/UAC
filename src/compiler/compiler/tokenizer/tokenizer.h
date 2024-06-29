@@ -31,10 +31,10 @@ struct tokenarr_s {
 typedef struct tokenarr_s tokenarr_t;
 
 struct tokenizer_reader_s {
-	 uint8_t type;
-	 FILE* fh; // TODO: pipelines and stuff like that
+	uint8_t type;
+	FILE* fh; // TODO: pipelines and stuff like that
 
-	 uint8_t eof; // flag raised by read_char() to mark EOF
+	uint8_t eof; // flag raised by read_char() to mark EOF
 };
 
 typedef struct tokenizer_reader_s tokenizer_reader_t;

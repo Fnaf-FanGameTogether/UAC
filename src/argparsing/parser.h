@@ -10,15 +10,13 @@ void parse_debug_mode(gpi_t* gpi);
 
 void parse_debug_mode(gpi_t* gpi)
 {
-   gpi->action_info = create_debug();
-	 if(gpi->argc < 3){
-			// no extra arguments, populate with default
-			return; // todo
-	 }
-
-	 // ...
-
-	 return;
+	// gpi->action_info = create_debug();
+	if(gpi->argc < 3){
+		// no extra arguments, populate with default
+		return; // todo
+	}
+	// ...
+	return;
 }
 
 #endif
