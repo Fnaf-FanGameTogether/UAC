@@ -72,7 +72,7 @@ void destroy_gpi(gpi_t* gpi);
 
 
 // Function code
-gpi_t*   create_gpi()
+gpi_t* create_gpi()
 {
     // this struct must be populated afterwards anyway so just this'll do
     return (gpi_t*)malloc(sizeof(gpi_t));
@@ -101,9 +101,16 @@ void init_gpi_args(
 
 void get_gpi_action(gpi_t* gpi){
     printf("Argument 0: %s\n", gpi->argv[0]);
+    if(gpi->argc < 2){
+        gpi->act = COMPILING; // default
+        return;
+    }
+
     printf("Argument 1: %s\n", gpi->argv[1]);
-    if (strcmp(gpi->argv[1], "-d") == 0){
+    if (!strcmp(gpi->argv[1], "-d")){
         printf("DEBUG MODE BITCH\n"); // Bucking feach
+        // gpi->action = DEBUGGING;
+        return;
     }
 }
 

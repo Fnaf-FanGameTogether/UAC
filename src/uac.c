@@ -23,7 +23,6 @@ int main(int argc, char** argv)
 
     get_gpi_action(args);
 
-
     loginfo_t* logger = NULL;
 
     check_logger(&logger); // automatically initialize it
@@ -34,6 +33,7 @@ int main(int argc, char** argv)
 
     destroy_default_logger();
     destroy_gpi(args);
+    return 0;
     return 0;
 }
 
