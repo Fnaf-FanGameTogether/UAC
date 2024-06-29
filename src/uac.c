@@ -34,6 +34,5 @@ int main(int argc, char** argv)
     destroy_default_logger();
     destroy_gpi(args);
     return 0;
-    return 0;
 }
 
