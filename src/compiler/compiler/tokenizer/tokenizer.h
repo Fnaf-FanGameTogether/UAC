@@ -1,6 +1,8 @@
 #ifndef _TOKENIZER_H_
 #define _TOKENIZER_H_
 
+#include <stdio.h>
+
 #include "./token.h"
 #include "logger.h"
 #include "utils/length.h"
@@ -31,7 +33,7 @@ struct tokenarr_s {
 typedef struct tokenarr_s tokenarr_t;
 
 struct tokenizer_reader_s {
-	uint8_t type;
+	uint8_t type; // type = 1 <-> stdin
 	FILE* fh; // TODO: pipelines and stuff like that
 
 	uint8_t eof; // flag raised by read_char() to mark EOF
@@ -40,14 +42,14 @@ struct tokenizer_reader_s {
 typedef struct tokenizer_reader_s tokenizer_reader_t;
 
 struct tokenizer_s {
-	 tokenarr_t* t_arr;
-	 pos_t* curr_pos;
+	tokenarr_t* t_arr;
+	pos_t* curr_pos;
 
-	 tokenizer_reader_t* reader;
+	tokenizer_reader_t* reader;
 
-     char*      name;
-     uint16_t   tokenizer_name;
-     loginfo_t* logger;
+
+    char*      name;
+    loginfo_t* logger;
 };
 
 typedef struct tokenizer_s tokenizer_t;
@@ -59,27 +61,92 @@ char NULL_TERMINATOR = '\00';
 // function declarations
 tokens_chunk_t* create_tokens_chunk();
 void destroy_tokens_chunk(tokens_chunk_t* cht);
-void _write_token(tokens_chunk_t* cht, toktype_t type, char* val,uint16_t size, pos_t* pos, uint8_t* state);
-void _delete_token(tokens_chunk_t* cht);
-void _create_tokarr(tokenarr_t** arr);
-void _destroy_tokarr(tokenarr_t* arr);
+void _write_token(tokens_chunk_t* cht, toktype_t type, char* val,uint16_t size, pos_t* pos, uint8_t* state); // alloc
+void _delete_token(tokens_chunk_t* cht); // dealloc
+void _create_tokarr(tokenarr_t** arr); // alloc
+void _destroy_tokarr(tokenarr_t* arr); // dealloc
+
+tokenizer_t* create_tokenizer(char* name, tokenizer_reader_t* reader); // alloc
 
 char read_char(tokenizer_reader_t* reader, uint8_t* valid);
 uint8_t eof(tokenizer_reader_t* reader);
 
 // this is important
 uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos_t* pos);
+tokenizer_reader_t* from_file(FILE* fd);
 
+/*
+ read `toks` tokens from the tokenizer and add them to it's tokenarr
+
+ returns: the amount of tokens read
+
+ if(fetch_token(tokenizer, toks) != toks) {
+    // EOF found
+    ...
+ }
+
+*/
+
+uint16_t fetch_token(tokenizer_t* tokenizer, uint16_t toks);
 
 
 // functions code
 
 
+tokenizer_reader_t* from_file(FILE* fd)
+{
+    tokenizer_reader_t* reader= (tokenizer_reader_t*)malloc(sizeof(tokenizer_reader_t));
+
+    if(reader == NULL){ return NULL; }
+
+    reader->eof = 0;
+    reader->type = 0;
+    reader->fh = fd;
+
+    return reader;
+}
+
+tokenizer_t* create_tokenizer(char* name, tokenizer_reader_t* reader)
+{
+    tokenizer_t* tok = (tokenizer_t*)malloc(sizeof(tokenizer_t));
+
+    if(tok == NULL)
+    {
+        return NULL;
+    }
+    tok->name = name;
+    // as long as the tokenizer is not complete, leave the logger either unset
+
+    tok->logger = NULL;
+    // or create it with the stdout
+    // tok->logger = logfile_from_file(stdout, 0xff);
+    // set_logger_name(tok->logger, tok->name);
+
+
+    tok->curr_pos = create_pos();
+    tok->reader = reader;
+    _create_tokarr(&tok->t_arr);
+
+    return tok;
+}
+
+
+uint16_t fetch_token(tokenizer_t* tokenizer, uint16_t toks)
+{
+    // TODO
+    return 0;
+}
+
 char read_char(tokenizer_reader_t* reader, uint8_t* valid)
 {
 	*valid = 0; // set success as true
 	// TODO: more logic to check if we're reading the correct type of input
-	if(reader == NULL || reader->fh == NULL)
+    if(reader == NULL)
+    {
+        *valid = 1;
+        return NULL_TERMINATOR;
+    }
+	if(reader->fh == NULL)
 	{
 	    // womp womp
 	    *valid = 1;
