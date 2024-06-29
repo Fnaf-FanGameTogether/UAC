@@ -25,7 +25,11 @@ tokenizer_reader_t* tokenizer_debug_readline_catastrophy()
     strcpy(cdm + ol, DEFAULT_FILENAME);
 
 
-    system(cdm);
+    if(system(cdm))
+    {
+        // wrong arguments or python inexistent
+        return NULL;
+    }
 
     // TODO: since we have to return an open handle from the file, 
     // we can't erase it yet, so we gonna leave that temp file there
@@ -34,7 +38,7 @@ tokenizer_reader_t* tokenizer_debug_readline_catastrophy()
     // free(cdm);
     // cdm = (char*)malloc(l + ol);
 
-    FILE* prompt = fopen(DEFAULT_FILENAME, "w");
+    FILE* prompt = fopen(DEFAULT_FILENAME, "r");
 
     if(prompt == NULL)
     {
