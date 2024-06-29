@@ -80,7 +80,7 @@ void check_logger(loginfo_t** info){
         }
         *info = get_default_logger();
         */
-        *info = get_default_logger();
+        *info = get_default_logger(); //This had truble compiling last time
         if(*info == NULL)
         {
             *info = create_default_logger();

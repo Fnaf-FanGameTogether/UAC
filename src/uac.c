@@ -21,6 +21,8 @@ int main(int argc, char** argv)
 
     fprint_builtin_platform_info(stdout);
 
+    get_gpi_action(args);
+
 
     loginfo_t* logger = NULL;
 
