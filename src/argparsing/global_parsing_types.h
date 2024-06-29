@@ -23,25 +23,27 @@ typedef enum {
     COMPILING = 2,
     LINKING = 3,
     ASSEMBLING = 4,
-    // maybe... ?
+    // Debugs an specific part of UAC
     DEBUGGING = 5,
     // compiler error checking
     // this may some compiler mode that sets the compiler to a 'watch out' state in case something happens
     ERROR_CHECKING = 6
 } actions_t;
 
-
+// Global Parsing Info struct
 struct gpi_s {
+    // Says the type(actions) from enum actions_t
     actions_t  act;
 
     // type is `act`, but for here on now please use pdhandle_type
     pdhandle_t action_info;
+    // Separated for easier access
     pdhandle_t verbose_descriptor;
 
-    // make a copy of them here
+    // make a copy the arguments here
     uint32_t argc; 
     char**   argv;
-}; // Global Parsing Info struct
+}; 
 
 typedef struct gpi_s gpi_t;
 
@@ -55,12 +57,29 @@ struct version_verbose_descriptor
 
 typedef struct version_verbose_descriptor vv_descr_t;
 
+
+typedef enum {
+    TOKENIZER = 0,
+    LINKER = 1,
+    COMPILER = 2,
+    ASSEMBLER = 4, // Mischevious >:3
+    NONE = 0xFF
+} debug_t;
+
+
+// The action infos
+
 struct compilation_action_info {
     // name is self explanatory
     uint8_t dummy; // argument for the compiler not to complain
 };
 
 typedef struct compilation_action_info compilation_action_info_t;
+
+struct debugging_action_info {
+    debug_t debug;
+};
+typedef struct debugging_action_info debug_action_info_t;
 
 
 // Function declarations
