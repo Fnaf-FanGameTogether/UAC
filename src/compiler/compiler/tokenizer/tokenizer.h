@@ -73,7 +73,7 @@ uint8_t eof(tokenizer_reader_t* reader);
 
 // this is important
 uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos_t* pos);
-tokenizer_reader_t* from_file(FILE* fd);
+tokenizer_reader_t* tokenizer_reader_from_file(FILE* fd);
 
 /*
  read `toks` tokens from the tokenizer and add them to it's tokenarr
@@ -93,7 +93,7 @@ uint16_t fetch_token(tokenizer_t* tokenizer, uint16_t toks);
 // functions code
 
 
-tokenizer_reader_t* from_file(FILE* fd)
+tokenizer_reader_t* tokenizer_reader_from_file(FILE* fd)
 {
     tokenizer_reader_t* reader= (tokenizer_reader_t*)malloc(sizeof(tokenizer_reader_t));
 

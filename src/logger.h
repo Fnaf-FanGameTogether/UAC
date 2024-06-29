@@ -113,7 +113,7 @@ loginfo_t* start_log_file(char* filename){
         return NULL;
     }
 
-    info->file = fopen(filename, "a");
+    info->file = fopen(filename, "w");
     if (info->file == NULL){
         return NULL;
     }
