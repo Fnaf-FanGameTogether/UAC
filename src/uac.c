@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 
     logger->state |= LOGGING_ACCEPT_ALL;
 
-    log_to_file(logger, NORMAL, "arg count: %d\n", argc);
+    wlog(logger, NORMAL, "arg count: %d\n", argc);
 
     destroy_default_logger();
     destroy_gpi(args);

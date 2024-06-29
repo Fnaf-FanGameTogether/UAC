@@ -55,7 +55,7 @@ loginfo_t* default_logger; // GG
 
 loginfo_t* start_log_file(char* filename);
 
-void log_to_file(loginfo_t* info, logtype_t type, char* message, ...);
+void wlog(loginfo_t* info, logtype_t type, char* message, ...);
 
 void clear_log(loginfo_t* info);
 void stop_logging(loginfo_t* info);
@@ -208,7 +208,7 @@ void log_logger_header(loginfo_t* info, logtype_t type)
 }
 
 
-void log_to_file(loginfo_t* info, logtype_t type, char* message,...){
+void wlog(loginfo_t* info, logtype_t type, char* message,...){
     check_logger(&info);
     if(type < info->min && !(info->state & LOGGING_ACCEPT_ALL)){
         // skip unaccepted loggings
