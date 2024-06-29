@@ -294,7 +294,7 @@ uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos
     // WHY???
     /* 
 
-    void next_token(){
+    void fetch_token(){
         ...
         if(push_token(...))
         {

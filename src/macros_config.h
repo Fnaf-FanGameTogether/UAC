@@ -1,7 +1,7 @@
 #ifndef _MACROS_CONFIG_H_
 #define _MACROS_CONFIG_H_
 
-
+#include <stdint.h>
 
 // this is a configuration file for the build
 
@@ -22,5 +22,25 @@
 #ifndef NULL
 #define NULL (void*)0
 #endif
+
+
+
+
+
+
+
+uint8_t mstrcmp(char* a, char* b)
+{
+    while(*a || *b)
+    {
+        if(*a != *b){
+            return 1;
+        }
+        a++;
+        b++;
+    }
+    return 0;
+}
+
 
 #endif

@@ -21,13 +21,18 @@ int main(int argc, char** argv)
 
     fprint_builtin_platform_info(stdout);
 
-    get_gpi_action(args);
-
     loginfo_t* logger = NULL;
 
     check_logger(&logger); // automatically initialize it
 
     logger->state |= LOGGING_ACCEPT_ALL;
+
+    get_gpi_action(args);
+
+    if(args->act == DEBUGGING)
+    {
+        parse_debug_mode(args);
+    }
 
     wlog(logger, NORMAL, "arg count: %d\n", argc);
 

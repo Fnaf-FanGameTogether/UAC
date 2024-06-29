@@ -74,10 +74,15 @@ struct compilation_action_info {
     uint8_t dummy; // argument for the compiler not to complain
 };
 
+struct tokenizer_debug_info {
+    uint8_t action;
+};
+typedef struct tokenizer_debug_info tokenizer_debug_info_t;
 typedef struct compilation_action_info compilation_action_info_t;
 
 struct debugging_action_info {
     debug_t debug;
+    pdhandle_t info;
 };
 typedef struct debugging_action_info debug_action_info_t;
 
@@ -125,7 +130,7 @@ void get_gpi_action(gpi_t* gpi){
     }
 
     // printf("Argument 1: %s\n", gpi->argv[1]);
-    if (!strcmp(gpi->argv[1], "-d")){
+    if (!mstrcmp(gpi->argv[1], "-d")){
         // printf("DEBUG MODE BITCH\n"); // Bucking feach
         gpi->act = DEBUGGING;
         return;
