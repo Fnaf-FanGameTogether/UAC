@@ -11,7 +11,7 @@ tokenizer_reader_t* readline();
 
 const char* DEFAULT_FILENAME = "0";
 
-tokenizer_reader_t* readline()
+tokenizer_reader_t* tokenizer_debug_readline_catastrophy()
 {
     uint16_t l = strlen(DEFAULT_FILENAME);
     const char* cmd = "python ./scripts/tokenizer_debug.py ";
