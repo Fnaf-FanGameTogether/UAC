@@ -74,6 +74,7 @@ uint8_t eof(tokenizer_reader_t* reader);
 // this is important
 uint8_t push_token(tokenarr_t* arr, toktype_t type, char* val,uint16_t size, pos_t* pos);
 tokenizer_reader_t* tokenizer_reader_from_file(FILE* fd);
+void close_reader(tokenizer_reader_t* reader);
 
 /*
  read `toks` tokens from the tokenizer and add them to it's tokenarr
@@ -91,7 +92,19 @@ uint16_t fetch_token(tokenizer_t* tokenizer, uint16_t toks);
 
 
 // functions code
-
+void close_reader(tokenizer_reader_t* reader)
+{
+    if(reader == NULL)
+    {
+        return;
+    }
+    if(reader->fh == NULL)
+    {
+        return;
+    }
+    fclose(reader->fh);
+    free(reader);
+}
 
 tokenizer_reader_t* tokenizer_reader_from_file(FILE* fd)
 {
