@@ -69,7 +69,7 @@ typedef enum {
 
 // The action infos
 
-struct compilation_action_info {
+struct compilation_debug_action_info {
     // name is self explanatory
     uint8_t dummy; // argument for the compiler not to complain
 };
@@ -78,7 +78,7 @@ struct tokenizer_debug_info {
     uint8_t action;
 };
 typedef struct tokenizer_debug_info tokenizer_debug_info_t;
-typedef struct compilation_action_info compiler_action_info_t;
+typedef struct compilation_debug_action_info compiler_debug_action_info_t;
 
 struct debugging_action_info {
     debug_t debug;

@@ -2,7 +2,8 @@
 #define _MACROS_CONFIG_H_
 
 #include <stdint.h>
-#include <string.h>
+// don't include random stuff here please
+// #include <string.h>
 
 // this is a configuration file for the build
 
@@ -32,6 +33,23 @@
 // Better
 uint8_t mstrcmp(char* a, char* b)
 {
+    /*
+    uint32_t mstrcmp(char* a, char* b){
+        // this version count the amount of characters diferent
+        // but the uncomented one is faster most of the time
+        // bc it exits when a diference is found
+        uint32_t c = 0;
+        while(*a || *b)
+        {
+            c += (*a != *b);
+            a++;
+            b++;
+        }
+     
+        c += (*a!=*b);
+        return c;
+    }    
+    */
     while(*a || *b)
     {
         if(*a != *b){

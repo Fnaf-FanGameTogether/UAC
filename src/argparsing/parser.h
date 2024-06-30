@@ -1,7 +1,13 @@
 #ifndef _PARSER_H_
 #define _PARSER_H_
+
+// #include <stdint.h>
 #include "argparsing/global_parsing_types.h"
-//#include "logger.h"
+
+// we may use this one in the future
+// "not now, not now" <- this has already been imported so it doesnt really matter rn
+#include "logger.h"
+
 
 // func declarations
 void parse_debug_mode(gpi_t* gpi);
@@ -54,8 +60,9 @@ tokenizer_debug_info_t* create_tokenizer_debug_info()
 	return res;
 }
 
-compiler_action_info_t* create_compiler_debug_info(){
-	compiler_action_info_t* cai = (compiler_action_info_t*)malloc(sizeof(compiler_action_info_t));
+compiler_debug_action_info_t* create_compiler_debug_info(){
+	// "te caiste? :c"
+	compiler_debug_action_info_t* cai = (compiler_debug_action_info_t*)malloc(sizeof(compiler_debug_action_info_t));
 	return cai;
 }
 
@@ -95,6 +102,47 @@ void parse_debug_mode(gpi_t* gpi)
 debug_action_info_t* create_debug(){
 	debug_action_info_t* info = (debug_action_info_t*)malloc(sizeof(debug_action_info_t));
 	return info;
+}
+
+// thank you so much for working out this memory deallocation functions we forgot to even conceive
+
+void free_debug_tokenizer_info(tokenizer_debug_info_t* tdi)
+{
+	// tokenizer debug info
+
+	free(tdi); // posibly in the future we'll add more stuff here
+}
+
+void free_debug_compiler_info(compiler_debug_action_info_t* cdi)
+{
+	// posibly add more freeing as things get more complicated, but for now
+	free(cdi);
+}
+
+
+void destroy_debug_action_info(debug_action_info_t* di)
+{
+	// di <-> Debug Info
+
+
+	switch(di->debug)
+	{
+		case TOKENIZER:
+			free_debug_tokenizer_info(di->info);
+			break;
+		case COMPILER:
+			free_debug_compiler_info(di->info);
+			break;
+		// this ones we havent even declared it's existence outside parse_debug_mode and enums
+		case LINKER:
+		case ASSEMBLER:
+			break;
+		default:
+			// whatever
+			break;
+	}
+	// maybe more logic
+	free(di);
 }
 
 #endif
