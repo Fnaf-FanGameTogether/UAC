@@ -77,13 +77,26 @@ struct compilation_debug_action_info {
 struct tokenizer_debug_info {
     uint8_t action;
 };
-typedef struct tokenizer_debug_info tokenizer_debug_info_t;
-typedef struct compilation_debug_action_info compiler_debug_action_info_t;
+
+struct linking_debug_action_info{
+    uint8_t action;
+};
+
+struct assembler_debug_action_info{
+    uint8_t action;
+};
+
 
 struct debugging_action_info {
     debug_t debug;
     pdhandle_t info;
 };
+
+typedef struct tokenizer_debug_info tokenizer_debug_info_t;
+typedef struct compilation_debug_action_info compiler_debug_action_info_t;
+typedef struct linking_debug_action_info linking_debug_action_info_t;
+typedef struct assembler_debug_action_info assembler_debug_action_info_t;
+
 typedef struct debugging_action_info debug_action_info_t;
 
 

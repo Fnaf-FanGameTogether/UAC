@@ -10,13 +10,28 @@
 
 
 // func declarations
-void parse_debug_mode(gpi_t* gpi);
 debug_action_info_t* create_debug();
+
+tokenizer_debug_info_t* create_tokenizer_debug_info();				//Alloc
+compiler_debug_action_info_t* create_compiler_debug_info();			//Alloc
+linking_debug_action_info_t* create_linker_debug_info();			//Alloc
+assembler_debug_action_info_t* create_assembler_debug_info();		//Alloc
+
+
+void parse_debug_mode(gpi_t* gpi);
+
 void parse_tokenizer_args(gpi_t* gpi);
 void parse_compiler_args(gpi_t* gpi);
+void parse_linker_args(gpi_t* gpi);
+void parse_assembler_args(gpi_t* gpi);
 
-tokenizer_debug_info_t* create_tokenizer_debug_info();
-compiler_debug_action_info_t* create_compiler_debug_info();
+
+void destroy_debug_action_info(debug_action_info_t* di);			//Dealloc
+
+void free_debug_tokenizer_info(tokenizer_debug_info_t* tdi);		//Dealloc
+void free_debug_compiler_info(compiler_debug_action_info_t* cdi);	//Dealloc
+void free_debug_linker_info(linking_debug_action_info_t* ldi);		//Dealloc
+void free_debug_assembler_info(assembler_debug_action_info_t* adi);	//Dealloc
 
 
 // func code
@@ -47,10 +62,30 @@ void parse_compiler_args(gpi_t* gpi)
 	compiler_debug_action_info_t* info = create_compiler_debug_info();
 	ai->info = info;
 
-	// MORE
+	// TODO: moeor
 	wlog(NULL, NORMAL, "Compilation argument parser\n");
 	return;
 
+}
+
+void parse_linker_args(gpi_t* gpi){
+	debug_action_info_t* ai = (debug_action_info_t*)gpi->action_info;
+	linking_debug_action_info_t* info = create_linker_debug_info();
+	ai->info = info;
+
+	// TODO: do morr
+	wlog(NULL, NORMAL, "Linker argument parser\n");
+	return;
+}
+
+void parse_assembler_args(gpi_t* gpi){
+	debug_action_info_t* ai = (debug_action_info_t*)gpi->action_info;
+	assembler_debug_action_info_t* info = create_assembler_debug_info();
+	ai->info = info;
+
+	// TODO: do morer
+	wlog(NULL, NORMAL, "Assembler argument parser\n");
+	return;
 }
 
 tokenizer_debug_info_t* create_tokenizer_debug_info()
@@ -64,6 +99,16 @@ compiler_debug_action_info_t* create_compiler_debug_info(){
 	// "te caiste? :c"
 	compiler_debug_action_info_t* cai = (compiler_debug_action_info_t*)malloc(sizeof(compiler_debug_action_info_t));
 	return cai;
+}
+
+linking_debug_action_info_t* create_linker_debug_info(){
+	linking_debug_action_info_t* ldai = (linking_debug_action_info_t*)malloc(sizeof(linking_debug_action_info_t));
+	return ldai;
+}
+
+assembler_debug_action_info_t* create_assembler_debug_info(){
+	linking_debug_action_info_t* adai = (linking_debug_action_info_t*)malloc(sizeof(linking_debug_action_info_t)); // I dunno why when I wrote "adai", my mind said "iwatodai"
+	return adai;
 }
 
 // XD
@@ -88,9 +133,11 @@ void parse_debug_mode(gpi_t* gpi)
 	}
 	else if (!mstrcmp(gpi->argv[2], "linker") || !mstrcmp(gpi->argv[2], "ld")){
 		info->debug = LINKER;
+		parse_linker_args(gpi);
 	}
 	else if (!mstrcmp(gpi->argv[2], "assembler") || !mstrcmp(gpi->argv[2], "ass")){
 		info->debug = ASSEMBLER;
+		parse_assembler_args(gpi);
 	}
 	else{
 		wlog(NULL,NORMAL,"WHY??!!!\n");
@@ -119,6 +166,14 @@ void free_debug_compiler_info(compiler_debug_action_info_t* cdi)
 	free(cdi);
 }
 
+void free_debug_linker_info(linking_debug_action_info_t* ldi){
+	free(ldi);
+}
+
+void free_debug_assembler_info(assembler_debug_action_info_t* adi){
+	free(adi);
+}
+
 
 void destroy_debug_action_info(debug_action_info_t* di)
 {
@@ -133,9 +188,12 @@ void destroy_debug_action_info(debug_action_info_t* di)
 		case COMPILER:
 			free_debug_compiler_info(di->info);
 			break;
-		// this ones we havent even declared it's existence outside parse_debug_mode and enums
+		// this ones we havent even declared it's existence outside parse_debug_mode and enums <- Done on my phone :>
 		case LINKER:
+			free_debug_linker_info(di->info);
+			break;
 		case ASSEMBLER:
+			free_debug_assembler_info(di->info);
 			break;
 		default:
 			// whatever
