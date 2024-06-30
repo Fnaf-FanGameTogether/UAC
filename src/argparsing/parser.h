@@ -16,7 +16,7 @@ void parse_tokenizer_args(gpi_t* gpi);
 void parse_compiler_args(gpi_t* gpi);
 
 tokenizer_debug_info_t* create_tokenizer_debug_info();
-compiler_action_info_t* create_compiler_debug_info();
+compiler_debug_action_info_t* create_compiler_debug_info();
 
 
 // func code
@@ -44,7 +44,7 @@ void parse_tokenizer_args(gpi_t* gpi)
 void parse_compiler_args(gpi_t* gpi)
 {
 	debug_action_info_t* ai = (debug_action_info_t*)gpi->action_info;
-	compiler_action_info_t* info = create_compiler_debug_info();
+	compiler_debug_action_info_t* info = create_compiler_debug_info();
 	ai->info = info;
 
 	// MORE
