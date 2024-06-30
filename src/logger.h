@@ -201,7 +201,7 @@ void log_logger_header(loginfo_t* info, logtype_t type)
     // by here print both
     if(info->name != NULL){
         //
-        fprintf(info->file, "%d %s ]: ", type, info->name);
+        fprintf(info->file, "(%d) - %s ]: ", type, info->name);
         return;
     }
     fprintf(info->file, "%d ]: ", type);

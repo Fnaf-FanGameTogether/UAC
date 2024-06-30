@@ -27,6 +27,8 @@ int main(int argc, char** argv)
 
     logger->state |= LOGGING_ACCEPT_ALL;
 
+    set_logger_name(logger,"stdout");
+
     get_gpi_action(args);
 
     if(args->act == DEBUGGING)
