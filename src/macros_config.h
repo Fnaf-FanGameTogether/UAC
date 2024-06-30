@@ -2,6 +2,7 @@
 #define _MACROS_CONFIG_H_
 
 #include <stdint.h>
+#include <string.h>
 
 // this is a configuration file for the build
 
@@ -28,7 +29,7 @@
 
 
 
-
+// Better
 uint8_t mstrcmp(char* a, char* b)
 {
     while(*a || *b)
@@ -39,8 +40,7 @@ uint8_t mstrcmp(char* a, char* b)
         a++;
         b++;
     }
-    return 0;
+    return *a != *b;
 }
-
 
 #endif
